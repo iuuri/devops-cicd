@@ -13,5 +13,41 @@ jobs:
       - name: Checkout de código
         uses: actions/checkout@v4
 
-      - name: Mostrar Mensagem
-        run: echo "Olá, mundo Devops!"
+      - name: Build aplicacao
+        run: echo "Buildando a aplicacao!"
+
+  dev: 
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Fase de Desenvolvimento 
+        run: echo "Deploy no ambiente de desenvolvimento"
+
+  qa:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Fase de Testes e Qualidade
+        run: echo "Executar os testes de Qualidade"
+
+  homologacao:
+    runs-on: ubuntu-latest
+    needs: 
+      - dev 
+      - qa
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Ambiente de homologacao
+        run: echo "Executando deploy no ambiente de homologacao" 
+
+  producao:
+    needs: homologacao
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy producao
+        run: echo "Executando deploy em prod"
+  
